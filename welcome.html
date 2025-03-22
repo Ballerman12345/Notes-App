@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Logbook</title>
+  <link rel="stylesheet" href="welcome-styles.css">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+  <header>
+    <div class="title">
+      <h1 id="welcome-title">Welcome to Your Logbook</h1>
+    </div>
+  </header>
+  
+  <main class="container">
+    <div class="app-container">
+      <!-- Sidebar with form -->
+      <aside class="sidebar">
+        <div class="logbook-form">
+          <h2>New Entry</h2>
+          <form id="entry-form">
+            <div class="form-group">
+              <label for="entry-title">Title</label>
+              <input type="text" id="entry-title" placeholder="Entry title..." required>
+            </div>
+            <div class="form-group">
+              <label for="entry-content">Content</label>
+              <textarea id="entry-content" placeholder="Write your logbook entry here..." required></textarea>
+            </div>
+            <button type="submit" id="save-button">Save Entry</button>
+          </form>
+        </div>
+      </aside>
+      
+      <!-- Main content area -->
+      <section class="logbook-entries">
+        <div class="entries-header">
+          <h2>Logbook Entries</h2>
+          <input type="text" class="filter-input" id="search-input" placeholder="Search entries...">
+        </div>
+        
+        <div id="entries-container">
+          <!-- Entries will be added here by JavaScript -->
+          <div class="empty-state">
+            <p>No entries yet. Create your first logbook entry!</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  
+  <script src="script.js"></script>
+</body>
+</html>
