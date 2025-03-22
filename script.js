@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Get username from URL parameter
+    // This is an event listener, something that waits for an event to happen before any code is executed and in this case it would be to make sure that the html document has loaded
+    // This is extremely importance, since if the html document has not loaded the js file would try to get elements that haven't been created, causing very bad errors
     const urlParams = new URLSearchParams(window.location.search);
     const username = urlParams.get('username');
     
@@ -17,8 +18,9 @@ document.addEventListener('DOMContentLoaded', function() {
         welcomeTitle.textContent = `Welcome ${storedUsername}`;
       }
     }
+    // Lines 7-20 will make a more personalized experience for anyone using this, by making it so that there is no real login process required
     
-    // DOM elements
+    // Document Object Model elements
     const entryForm = document.getElementById('entry-form');
     const entryTitle = document.getElementById('entry-title');
     const entryContent = document.getElementById('entry-content');
@@ -26,10 +28,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('search-input');
     
     // Use username in localStorage key to have separate entries for different users
-    const storageKey = username ? 
-      `logbookEntries_${username}` : 
+    //This utilizer Ternary (Shorthand Operators) for the if-else statements
+    //The syntax for Ternary Operators is condition ? value_if_true:value_if_false
+    const storageKey = username ? //this would be the condition
+      `logbookEntries_${username}` : //this would be for if the condition or value is true
       localStorage.getItem('logbookUsername') ? 
-        `logbookEntries_${localStorage.getItem('logbookUsername')}` : 
+        `logbookEntries_${localStorage.getItem('logbookUsername')}` : //this would then be for if it was false
         'logbookEntries';
     
     // Load entries from localStorage
@@ -55,10 +59,10 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Render each entry
       entriesToRender.forEach((entry, index) => {
-        const entryElement = document.createElement('div');
+        const entryElement = document.createElement('div'); //creating a new div element for note entry
         entryElement.className = 'entry';
         
-        // Format date
+        // Format date into a readable format
         const entryDate = new Date(entry.date);
         const formattedDate = entryDate.toLocaleString('en-US', {
           year: 'numeric',
@@ -68,6 +72,11 @@ document.addEventListener('DOMContentLoaded', function() {
           minute: '2-digit'
         });
         
+        //this will be building the html structure for the entry using template literals
+        //this is used to embed expressions within strings, for example
+          //const name = John;
+          //const age = 30;
+          //console.log(`My name is ${name} and I am ${age} years old.`);
         entryElement.innerHTML = `
           <div class="entry-header">
             <h3 class="entry-title">${entry.title}</h3>
@@ -87,10 +96,10 @@ document.addEventListener('DOMContentLoaded', function() {
         entriesContainer.appendChild(entryElement);
       });
       
-      // Add event listeners to edit and delete buttons
+      // Adds click event listeners to edit and delete buttons
       document.querySelectorAll('.edit-btn').forEach(btn => {
         btn.addEventListener('click', handleEdit);
-      });
+      }); //makes it so that clicking this button just points them to the appropriate handler functions
       
       document.querySelectorAll('.delete-btn').forEach(btn => {
         btn.addEventListener('click', handleDelete);
@@ -98,22 +107,26 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Save entry to localStorage
+    // This is going to allow for all entries to remain even with page refreshes and such
+    //converts entries array to JSON string
+    //JSON is a text based format for data exchanges, and the data that is being exchanged here is saved to Local Storage
     function saveEntries() {
       localStorage.setItem(storageKey, JSON.stringify(entries));
     }
     
     // Handle form submission
     entryForm.addEventListener('submit', function(e) {
-      e.preventDefault();
+      e.preventDefault(); //this prevents the page from reloading as it is the default response to the submission button
       
       const title = entryTitle.value.trim();
       const content = entryContent.value.trim();
+    //gets and trims the title and content values of the notes
+        
+      if (!title || !content) return; //allows for an early return if both of the fields are empty, so that it wont error if the user inputs nothing
       
-      if (!title || !content) return;
+      const editingIndex = entryForm.dataset.editing; //checks if the user is editing
       
-      const editingIndex = entryForm.dataset.editing;
-      
-      if (editingIndex !== undefined) {
+      if (editingIndex !== undefined) { //if the user is editing this will
         // Update existing entry
         entries[editingIndex] = {
           ...entries[editingIndex],
@@ -124,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Reset form state
         delete entryForm.dataset.editing;
         document.getElementById('save-button').textContent = 'Save Entry';
-      } else {
+      } else { //if the user is just creating a new entry
         // Create new entry
         const newEntry = {
           id: Date.now().toString(),
@@ -141,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function() {
       saveEntries();
       renderEntries();
       
-      // Reset form
+      // Reset form fields
       entryForm.reset();
     });
     
